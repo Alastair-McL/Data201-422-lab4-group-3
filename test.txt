@@ -1,4 +1,11 @@
 This is our group's test file.
+we are going to use python
 
 Alastair was here.
 Hi have a nice day! - Chinnu Rappai
+
+Hi, Darrel here.
+
+Hi, Sophie here!
+Just a trial edit for the lab - Chinnu
+File edited on own branch - Chinnu Rappai
