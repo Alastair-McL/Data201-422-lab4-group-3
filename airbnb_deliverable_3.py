@@ -8,10 +8,6 @@ Chinnu Rappai
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-
-import pandas as pd
-
-# Match each filename to its month and year
 files = {
     "listings_2025_10.csv": "2025-10",
     "listings_2025_11.csv": "2025-11",
@@ -25,19 +21,14 @@ files = {
 }
 
 christchurch_datasets = []
-
+#loading and filtering
 for filename, month_year in files.items():
-    # Load the monthly dataset
     df = pd.read_csv(filename)
 
-    # Keep Christchurch City only
     christchurch = df[
         df["neighbourhood_group"] == "Christchurch City"
-    ].copy()
-
-    # Add the month and year
+    ].copy() 
     christchurch["month_year"] = month_year
-
     # Add it to the list of prepared datasets
     christchurch_datasets.append(christchurch)
 
