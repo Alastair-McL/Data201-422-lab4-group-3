@@ -6,4 +6,3 @@ __pycache__/
 
 # Large Airbnb dataset stored locally
 listings.csv
-listings-2.csv
