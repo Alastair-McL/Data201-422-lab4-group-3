@@ -9,8 +9,6 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-import pandas as pd
-
 #Imported June 2026 data
 df = pd.read_csv("listings_2026_06.csv")
 
