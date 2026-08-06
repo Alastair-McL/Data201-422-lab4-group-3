@@ -1,0 +1,30 @@
+column,category,count
+neighbourhood,Central Ward,10554
+neighbourhood,Banks Peninsula Ward,3548
+neighbourhood,Heathcote Ward,2074
+neighbourhood,Riccarton Ward,1885
+neighbourhood,Fendalton Ward,1605
+neighbourhood,Halswell Ward,1081
+neighbourhood,Spreydon Ward,1056
+neighbourhood,Innes Ward,1027
+neighbourhood,Cashmere Ward,1009
+neighbourhood,Harewood Ward,909
+neighbourhood,Coastal Ward,891
+neighbourhood,Waimairi Ward,883
+neighbourhood,Linwood Ward,659
+neighbourhood,Papanui Ward,648
+neighbourhood,Hornby Ward,594
+neighbourhood,Burwood Ward,372
+room_type,Entire home/apt,22765
+room_type,Private room,5744
+room_type,Hotel room,251
+room_type,Shared room,35
+month_year,2026-06,3469
+month_year,2026-05,3361
+month_year,2026-04,3273
+month_year,2026-03,3227
+month_year,2026-02,3190
+month_year,2025-12,3180
+month_year,2026-01,3057
+month_year,2025-11,3047
+month_year,2025-10,2991

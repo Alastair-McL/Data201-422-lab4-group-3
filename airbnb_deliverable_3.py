@@ -80,6 +80,26 @@ combined.to_csv(
 print("Total combined rows:", len(combined))
 print("Combined dataset saved successfully.")
 
+# Convert price to numeric
+combined["price"] = pd.to_numeric(
+    combined["price"]
+    .astype(str)
+    .str.replace("$", "", regex=False)
+    .str.replace(",", "", regex=False),
+    errors="coerce"
+)
+
+# Remove missing prices only from the data used for plotting
+christchurch_prices = combined["price"].dropna()
+
+print("Listings with a valid price:", len(christchurch_prices))
+print("Listings with a missing price:", combined["price"].isna().sum())
+
+
+# Limit the displayed range to the 99th percentile
+# This prevents extreme prices from compressing the histogram
+price_limit = christchurch_prices.quantile(0.99)
+
 
 # --------------------------------------------------
 # SUMMARY STATISTICS
@@ -154,3 +174,39 @@ all_category_counts = pd.concat(category_counts, ignore_index=True)
 all_category_counts.to_csv("category_counts.csv", index=False)
 
 print("\nAll summary files saved successfully.")
+
+# --------------------------------------------------
+# Visualisations
+# --------------------------------------------------
+# Plot the price histogram
+
+# --- Plot 1 Christchurch Price Histogram ---
+plt.figure(figsize=(10, 6))
+
+plt.hist(
+    christchurch_prices,
+    bins=50,
+    range=(0, price_limit),
+    color="steelblue",
+    edgecolor="black",
+    alpha=0.8
+)
+
+plt.title(
+    "Christchurch Airbnb Price Distribution\n"
+    "October 2025–June 2026"
+)
+plt.xlabel("Price per night (NZD)")
+plt.ylabel("Number of listing records")
+plt.grid(axis="y", alpha=0.3)
+plt.tight_layout()
+
+# Save the plot before displaying it
+plt.savefig(
+    "christchurch_price_histogram.png",
+    dpi=300,
+    bbox_inches="tight"
+)
+
+plt.show()
+
