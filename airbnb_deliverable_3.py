@@ -16,6 +16,12 @@ print(df.head())
 print("Rows and columns:", df.shape)
 print("Column names:", df.columns.tolist())
 
+
+import pandas as pd
+
+# Load the full dataset
+df = pd.read_csv("listings_2026_06.csv")
+
 # Keep Christchurch City listings only
 christchurch = df[
     df["neighbourhood_group"] == "Christchurch City"
