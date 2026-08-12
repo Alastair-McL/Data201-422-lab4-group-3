@@ -225,3 +225,114 @@ plt.savefig(
 
 plt.show()
 
+# --------------------------------------------------
+# Plot 2 -Days Since Last Review Histogram
+# --------------------------------------------------
+
+# Add scrape date (same as KNIME workflow)
+combined["scrape_date"] = "2026-07-29"
+
+# Convert dates
+combined["scrape_date"] = pd.to_datetime(
+    combined["scrape_date"]
+)
+
+combined["last_review"] = pd.to_datetime(
+    combined["last_review"],
+    errors="coerce"
+)
+
+# Calculate days since last review
+combined["days_since_last_review"] = (
+    combined["scrape_date"] - combined["last_review"]
+).dt.days
+
+
+# Remove missing and invalid values
+days_since_review = combined[
+    combined["days_since_last_review"].notna()
+    & (combined["days_since_last_review"] >= 0)
+]["days_since_last_review"]
+
+
+print("Listings with valid review dates:", len(days_since_review))
+print("Missing review dates:", combined["last_review"].isna().sum())
+
+
+# Remove extreme values for visualisation
+review_limit = days_since_review.quantile(0.99)
+
+
+# Plot histogram
+plt.figure(figsize=(10, 6))
+
+plt.hist(
+    days_since_review[days_since_review <= review_limit],
+    bins=50,
+    range=(0, review_limit),
+    edgecolor="black",
+    alpha=0.8
+)
+
+plt.title(
+    "Distribution of Days Since Last Review\n"
+    "Christchurch Airbnb Listings (October 2025–June 2026)"
+)
+
+plt.xlabel("Days Since Last Review")
+plt.ylabel("Number of Listing Records")
+
+plt.grid(axis="y", alpha=0.3)
+
+plt.tight_layout()
+
+plt.savefig(
+    "days_since_last_review_histogram.png",
+    dpi=300,
+    bbox_inches="tight"
+)
+
+plt.show()
+
+
+# --------------------------------------------------
+# Top 10% Most Reviewed Properties in Christchurch
+# --------------------------------------------------
+
+# Load the combined Christchurch dataset
+combined = pd.read_csv(
+    "christchurch_listings_2025-10_to_2026-06.csv"
+)
+
+# Find the review count threshold for the top 10%
+review_threshold = combined["number_of_reviews"].quantile(0.90)
+
+print("Top 10% review threshold:", review_threshold)
+
+# Filter properties in the top 10%
+top_reviewed = combined[
+    combined["number_of_reviews"] >= review_threshold
+].copy()
+
+print(
+    "Number of top 10% reviewed properties in Christchurch:",
+    len(top_reviewed)
+)
+
+# Display the top 10 most reviewed Christchurch properties
+print(
+    top_reviewed[
+        [
+            "id",
+            "name",
+            "number_of_reviews",
+            "neighbourhood_group",
+            "room_type"
+        ]
+    ]
+    .sort_values(
+        by="number_of_reviews",
+        ascending=False
+    )
+    .head(10)
+)
