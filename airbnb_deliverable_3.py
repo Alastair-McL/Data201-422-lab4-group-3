@@ -173,6 +173,21 @@ print("\nAll summary files saved successfully.")
 # Visualisations
 # --------------------------------------------------
 # Plot the price histogram
+# Convert the combined Christchurch price column to numeric
+combined["price"] = pd.to_numeric(
+    combined["price"]
+        .astype(str)
+        .str.replace("$", "", regex=False)
+        .str.replace(",", "", regex=False),
+    errors="coerce"
+)
+
+# Retain valid, non-negative prices
+christchurch_prices = combined.loc[
+    combined["price"].notna()
+    & (combined["price"] >= 0),
+    "price"
+]
 
 # --- Plot 1 Christchurch Price Histogram ---
 plt.figure(figsize=(10, 6))
