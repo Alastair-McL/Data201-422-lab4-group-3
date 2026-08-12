@@ -6,4 +6,9 @@ __pycache__/
 
 # Large Airbnb dataset stored locally
 listings.csv
-listings-2.csv
+
+# Python virtual environments
+venv/
+venv_broken/
+.venv/
+
