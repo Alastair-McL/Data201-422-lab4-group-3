@@ -20,3 +20,8 @@
 ##### availability_365: number of days in the next 365 that the listing is bookable for.
 ##### number_of_reviews_ltm: number of reviews the listing has received in the last 12 months 
 
+## Deliverable 4: Christchurch listings cleaning
+
+The script `airbnb_deliverable_4.py` cleans the combined Christchurch listings dataset, retaining latitude and longitude.
+
+See [cleaning decisions and results](cleaned/deliverable_4_cleaning_notes.md) for the reasons behind each change, its consequences and instructions for running the code.
