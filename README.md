@@ -49,9 +49,9 @@ The data is sourced from **rental bond lodgements**, which landlords/agents are 
 | `Active Bonds` | integer | Number of bonds that were held/active (in force) at any point during the quarter, for this combination — a broader, stock-style measure of tenancies rather than new lodgements. |
 | `Closed Bonds` | integer | Number of bonds finalised/refunded (tenancies that ended) during the quarter, for this combination. |
 | `Median Rent` | numeric (AUD/week) | Median weekly rent across the bonds/tenancies in this combination for the quarter. |
-| `Geometric Mean Rent` | numeric (AUD/week) | Geometric mean of weekly rent — used because rent distributions are right-skewed; the geometric mean is less distorted by high-end outliers than the arithmetic mean. |
-| `Upper Quartile Rent` | numeric (AUD/week) | The 75th percentile weekly rent for this combination. |
-| `Lower Quartile Rent` | numeric (AUD/week) | The 25th percentile weekly rent for this combination. |
+| `Geometric Mean Rent` | numeric (NZD/week) | Geometric mean of weekly rent — used because rent distributions are right-skewed; the geometric mean is less distorted by high-end outliers than the arithmetic mean. |
+| `Upper Quartile Rent` | numeric (NZD/week) | The 75th percentile weekly rent for this combination. |
+| `Lower Quartile Rent` | numeric (NZD/week) | The 25th percentile weekly rent for this combination. |
 | `Log Std Dev Weekly Rent` | numeric | Standard deviation of the natural log of weekly rent — a measure of rent dispersion/inequality within the combination, consistent with reporting a geometric-mean-based rent series. |
 
 ### Notes on missing / null values
@@ -76,7 +76,7 @@ For a given location and quarter, rows with `Dwelling Type = ALL` and/or `Number
 ## Suggested uses
 
 - Tracking rent growth over time for a suburb, dwelling type, or bedroom count
-- Comparing rental affordability/rent levels across NSW regions
+- Comparing rental affordability/rent levels across New Zealand locations
 - Analysing market activity (turnover) via `Total Bonds` / `Closed Bonds`
 - Studying rent dispersion within a market using `Log Std Dev Weekly Rent`
 
