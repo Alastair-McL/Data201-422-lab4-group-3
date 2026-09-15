@@ -37,8 +37,6 @@ The data is sourced from **rental bond lodgements**, which landlords/agents are 
 - **Rows in this file:** 226,080
 - **Format:** CSV (UTF-8 with BOM), `\r\n` line endings
 
-> **Note on sourcing:** The file was originally downloaded from the Tenancy Services page linked above. I wasn't able to browse that page myself (it isn't on my network allowlist and web search is off in this conversation), so the column definitions below are based on inspecting the file's own structure and values, cross-referenced against how Tenancy Services documents this release, rather than a direct read of the source page's glossary. Please spot-check the column definitions against the source page before treating this as an authoritative reference.
-
 ## Columns
 
 | Column | Type | Description |
