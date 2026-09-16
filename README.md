@@ -26,7 +26,7 @@ The script `airbnb_deliverable_4.py` cleans the combined Christchurch listings d
 
 See [cleaning decisions and results](cleaned/deliverable_4_cleaning_notes.md) for the reasons behind each change, its consequences and instructions for running the code.
 
-# Detailed Quarterly Tenancy Data — Q1 2020 to Q3 2026
+# Detailed Quarterly Tenancy Data — February 2020 to July 2026
 
 ## Overview
 
