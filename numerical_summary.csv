@@ -1,0 +1,11 @@
+,count,min,max,mean,std
+availability_365,28795.0,0.0,365.0,203.8,112.28
+calculated_host_listings_count,28795.0,1.0,1586.0,58.3,188.53
+latitude,28795.0,-43.87,-43.42,-43.56,0.08
+license,0.0,,,,
+longitude,28795.0,172.43,173.1,172.66,0.1
+minimum_nights,28758.0,1.0,365.0,1.79,5.51
+number_of_reviews,28795.0,0.0,1584.0,70.39,120.51
+number_of_reviews_ltm,28795.0,0.0,185.0,19.0,23.5
+price,18128.0,27.0,43654.0,260.2,943.72
+reviews_per_month,26168.0,0.01,16.57,2.35,2.19
