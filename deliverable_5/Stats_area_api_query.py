@@ -42,10 +42,10 @@ API_KEY = "insert_your_api_key_here"
 LAYER_ID = 123515
 
 # Input Airbnb CSV
-INPUT_CSV = "/Users/alastairmclauchlan/HD documents/Uni/DATA201/airbnb/cleaned/christchurch_listings_cleaned.csv"
+INPUT_CSV = "/Users/alastairmclauchlan/HD documents/Uni/DATA201/airbnb/cleaned/christchurch_listings_cleaned.csv" #change this to your input file path
 
 # Hard-coded output path
-OUTPUT_CSV = "/Users/alastairmclauchlan/HD documents/Uni/DATA201/airbnb/cleaned/christchurch_listings_cleaned_area_codes.csv"
+OUTPUT_CSV = "/Users/alastairmclauchlan/HD documents/Uni/DATA201/airbnb/cleaned/christchurch_listings_cleaned_area_codes.csv" #change this to your output file path
 
 URL = "https://koordinates.com/services/query/v1/vector.json"
 
