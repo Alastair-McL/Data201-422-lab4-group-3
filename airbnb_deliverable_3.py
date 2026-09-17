@@ -1,5 +1,6 @@
 '''Data201/422 
 AirBnB deliverable 3
+Copy this file to a new folder that contains the combined Christchurch CSV file, then run it from that folder.
 Alastair McLauchlan
 Sophie Mcnee
 Darrel Susan Binu
@@ -8,20 +9,19 @@ Chinnu Rappai
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from pathlib import Path
+
+"""set working folder"""
+# Find the folder where this Python script is located.
+# This prevents problems caused by running the script from another directory.
+folder = Path(__file__).parent
 
 #Imported June 2026 data
-df = pd.read_csv("listings_2026_06.csv")
+df = pd.read_csv(folder / "listings_2026_06.csv")
 
 print(df.head())
 print("Rows and columns:", df.shape)
 print("Column names:", df.columns.tolist())
-
-
-import pandas as pd
-
-# Load the full dataset
-df = pd.read_csv("listings_2026_06.csv")
-
 # Keep Christchurch City listings only
 christchurch = df[
     df["neighbourhood_group"] == "Christchurch City"
@@ -179,15 +179,6 @@ print("\nAll summary files saved successfully.")
 # Visualisations
 # --------------------------------------------------
 # Plot the price histogram
-# Convert the combined Christchurch price column to numeric
-combined["price"] = pd.to_numeric(
-    combined["price"]
-        .astype(str)
-        .str.replace("$", "", regex=False)
-        .str.replace(",", "", regex=False),
-    errors="coerce"
-)
-
 # Retain valid, non-negative prices
 christchurch_prices = combined.loc[
     combined["price"].notna()
