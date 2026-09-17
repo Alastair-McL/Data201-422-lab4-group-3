@@ -36,7 +36,7 @@ from multiprocessing import Pool
 import time
 
 # Your existing Koordinates API key
-API_KEY = "530924a7a90244d289eccec5174745df"
+API_KEY = "insert_your_api_key_here"
 
 # Koordinates layer ID
 LAYER_ID = 123515
