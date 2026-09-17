@@ -54,8 +54,8 @@ The data is sourced from **rental bond lodgements**, which landlords/agents are 
 | `Total Bonds` | integer | Number of *new* bond lodgements recorded for this location/dwelling type/bed count combination during the quarter (i.e. new tenancies started). |
 | `Active Bonds` | integer | Number of bonds that were held/active (in force) at any point during the quarter, for this combination — a broader, stock-style measure of tenancies rather than new lodgements. |
 | `Closed Bonds` | integer | Number of bonds finalised/refunded (tenancies that ended) during the quarter, for this combination. |
-| `Median Rent` | numeric (AUD/week) | Median weekly rent across the bonds/tenancies in this combination for the quarter. |
-| `Geometric Mean Rent` | numeric (NZD/week) | Geometric mean of weekly rent — used because rent distributions are right-skewed; the geometric mean is less distorted by high-end outliers than the arithmetic mean. |
+| `Median Rent` | numeric (NZD/week) | Median weekly rent across the bonds/tenancies in this combination for the quarter. |
+| `Geometric Mean Rent` | numeric (NZD/week) | represents the typical weekly rent for each quarter, calculated using the geometric mean of the reported rental values. It provides a measure of central tendency that is less influenced by extremely high or low rents than the arithmetic mean, making it useful for summarising rental distributions. |
 | `Upper Quartile Rent` | numeric (NZD/week) | The 75th percentile weekly rent for this combination. |
 | `Lower Quartile Rent` | numeric (NZD/week) | The 25th percentile weekly rent for this combination. |
 | `Log Std Dev Weekly Rent` | numeric | Standard deviation of the natural log of weekly rent — a measure of rent dispersion/inequality within the combination, consistent with reporting a geometric-mean-based rent series. |
