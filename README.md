@@ -93,3 +93,12 @@ For a given location and quarter, rows with `Dwelling Type = ALL` and/or `Number
 - Small-sample suppression means many suburb-level rows, especially for less common dwelling types or bedroom counts, will have `NULL` rent statistics even though bond counts are present.
 - `Number Of Beds` coding is inconsistent across time (`5+` appears alongside exact values `5`–`15` in different periods), so treat it as an approximate/banded field for higher bedroom counts rather than a strictly continuous one.
 
+
+
+# Deliverable 5
+
+## Median Airbnb Price in Christchurch Central
+
+Using the joined Airbnb and rental bond dataset, Airbnb listings were filtered to Christchurch Central (Location ID 326600). Duplicate observations created by the join were removed using the Airbnb listing ID and month before calculating the median nightly price.
+
+The median Airbnb price in Christchurch Central is **$239.00 per night**.
