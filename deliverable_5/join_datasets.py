@@ -6,7 +6,7 @@ airbnb = pd.read_csv(
 )
 
 bonds = pd.read_csv(
-    "rental_bond_cleaned_filtered.csv"
+    "deliverable_4/rental_bond_cleaned_filtered.csv"
 )
 
 # --------------------------------------------------
