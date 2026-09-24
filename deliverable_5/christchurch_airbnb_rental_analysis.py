@@ -529,50 +529,49 @@ print(comparison[comparison["Location Id"] == 322800])
 # The chart below compares the number of Airbnb listings with the number of long-term rental properties for the locations with the largest combined number of properties.
 # ============================================================================
 
-top_locations = (
-    comparison
+all_locations = (
+    comparison[
+        comparison["Airbnb_Listings"] > 0
+    ]
     .sort_values(
-        "Total_Properties",
+        "Airbnb_Listings",
         ascending=False
     )
-    .head(15)
+    .head(20)          # cap for readability
     .copy()
 )
 
-x = np.arange(len(top_locations))
+x = np.arange(len(all_locations))
 width = 0.38
 
-plt.figure(figsize=(14, 7))
+plt.figure(figsize=(10, len(all_locations) * 0.3))
 
-plt.bar(
+plt.barh(
     x - width / 2,
-    top_locations["Airbnb_Listings"],
+    all_locations["Airbnb_Listings"],
     width,
     label="Airbnb listings"
 )
 
-plt.bar(
+plt.barh(
     x + width / 2,
-    top_locations["Long_Term_Rental_Properties"],
+    all_locations["Long_Term_Rental_Properties"],
     width,
     label="Long-term rental properties"
 )
 
-plt.xlabel("Location ID")
-plt.ylabel("Number of properties")
-
-plt.title(
-    "Airbnb Listings vs Long-Term Rental Properties by Location"
-)
-
-plt.xticks(
+plt.yticks(
     x,
-    [str(int(x)) for x in top_locations["Location Id"]],
-    rotation=45
+    [str(int(loc)) for loc in all_locations["Location Id"]]
 )
 
-plt.legend()
+# Put the highest-ranked location at the top instead of the bottom
+plt.gca().invert_yaxis()
 
+plt.xlabel("Number of properties")
+plt.ylabel("Location ID")
+plt.title("Airbnb Listings vs Long-Term Rental Properties by Location")
+plt.legend()
 plt.tight_layout()
 plt.show()
 
