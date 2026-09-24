@@ -20,6 +20,7 @@ from pathlib import Path
 # Find the folder where this Python script is located.
 # This prevents problems caused by running the script from another directory.
 folder = Path(__file__).parent.parent
+output_folder = Path(__file__).parent
 
 input_files = {
     "listings_2025_10.csv": "2025-10",
@@ -38,7 +39,7 @@ identifier_columns = ["id", "host_id"]
 category_columns = ["neighbourhood", "room_type", "month_year"]
 review_plot_quantile = 0.99
 top_reviewed_quantile = 0.90
-scrape_date = "2026-06-29"
+scrape_date = "2026-06-19"
 
 christchurch_datasets = []
 #loading and filtering
@@ -60,14 +61,6 @@ combined_listings = pd.concat(
     ignore_index=True
     )
 
-# Save the combined dataset
-combined_listings.to_csv(
-    folder / output_file,
-    index=False
-)
-
-print("Total combined rows:", len(combined_listings))
-print("Combined dataset saved successfully.")
 
 # Convert price to numeric
 combined_listings["price"] = pd.to_numeric(
@@ -105,8 +98,9 @@ missing_summary = pd.DataFrame({
 
 print("\nMISSING VALUES:")
 print(missing_summary.to_string())
-missing_summary.to_csv("missing_values_summary.csv")
-
+missing_summary.to_csv(
+    output_folder / "missing_values_summary.csv"
+)
 
 # Numerical statistics
 numerical_columns = combined_listings.select_dtypes(
@@ -120,7 +114,9 @@ numerical_summary = numerical_summary[
 
 print("\nNUMERICAL SUMMARY:")
 print(numerical_summary.to_string())
-numerical_summary.to_csv("numerical_summary.csv")
+numerical_summary.to_csv(
+    output_folder / "numerical_summary.csv"
+)
 
 
 # Categorical statistics
@@ -139,8 +135,9 @@ categorical_summary = categorical_summary.rename(columns={
 
 print("\nCATEGORICAL SUMMARY:")
 print(categorical_summary.to_string())
-categorical_summary.to_csv("categorical_summary.csv")
-
+categorical_summary.to_csv(
+    output_folder / "categorical_summary.csv"
+)
 
 # Category counts
 category_counts = []
@@ -157,8 +154,10 @@ for column in category_columns:
     category_counts.append(counts)
 
 all_category_counts = pd.concat(category_counts, ignore_index=True)
-all_category_counts.to_csv("category_counts.csv", index=False)
-
+all_category_counts.to_csv(
+    output_folder / "category_counts.csv",
+    index=False
+)
 print("\nAll summary files saved successfully.")
 
 # --------------------------------------------------
@@ -195,7 +194,7 @@ plt.tight_layout()
 
 # Save the plot before displaying it
 plt.savefig(
-    folder / "christchurch_price_histogram.png",
+    output_folder / "christchurch_price_histogram.png",
     dpi=300,
     bbox_inches="tight"
 )
@@ -224,6 +223,14 @@ combined_listings["days_since_last_review"] = (
     combined_listings["scrape_date"] - combined_listings["last_review"]
 ).dt.days
 
+# Save the final processed Christchurch dataset
+combined_listings.to_csv(
+    folder / output_file,
+    index=False
+)
+
+print("Total combined rows:", len(combined_listings))
+print("Final combined dataset saved successfully.")
 
 # Remove missing and invalid values
 days_since_review = combined_listings[
@@ -264,7 +271,7 @@ plt.grid(axis="y", alpha=0.3)
 plt.tight_layout()
 
 plt.savefig(
-    folder / "days_since_last_review_histogram.png",
+    output_folder / "days_since_last_review_histogram.png",
     dpi=300,
     bbox_inches="tight"
 )
