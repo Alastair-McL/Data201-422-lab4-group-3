@@ -6,15 +6,6 @@ __pycache__/
 
 # Large Airbnb datasets stored locally
 listings.csv
-"listings_2025_10.csv": "2025-10",
-"listings_2025_11.csv": "2025-11",
-"listings_2025_12.csv": "2025-12",
-"listings_2026_01.csv": "2026-01",
-"listings_2026_02.csv": "2026-02",
-"listings_2026_03.csv": "2026-03",
-"listings_2026_04.csv": "2026-04",
-"listings_2026_05.csv": "2026-05",
-"listings_2026_06.csv": "2026-06"
 christchurch_listings_2025-10_to_2026-06.csv
 christchurch_listings_cleaned.csv
 christchurch_listings_cleaned_area_codes.csv
@@ -23,3 +14,4 @@ venv/
 venv_broken/
 .venv/
 
+listings_*.csv
