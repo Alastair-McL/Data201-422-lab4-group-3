@@ -273,8 +273,6 @@ for column in numeric_columns:
 
 **Why:** A good variable name tells what it is without needing a comment.
 
----
-
 ## Change 2: Put the key settings in one place
 
 Some settings, like the expected months and the city name, were written directly inside the code. Moved them to the top of the file instead.
