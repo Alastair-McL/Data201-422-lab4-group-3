@@ -243,6 +243,8 @@ The saved dataset therefore includes the later processing performed by the pipel
 
 # Deliverable 4 Changes
 
+# Part 1: Changes to airbnb_deliverable_4.py
+
 ## Change 1: Gave a variable a proper name
 
 A column was just called c. Now it's called column.
