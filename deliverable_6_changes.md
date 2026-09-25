@@ -267,6 +267,36 @@ for column in numeric_columns:
 
 **Why:** A good variable name tells what it is without needing a comment.
 
+## Change 2: Put the key settings in one place
+
+Some settings, like the expected months and the city name, were written directly inside the code. Moved them to the top of the file instead.
+
+**From:**
+
+```python
+expected = pd.period_range("2025-10", "2026-06", freq="M").astype(str)
+if not df.month_year.isin(expected).all() or not df.neighbourhood_group.eq("Christchurch City").all():
+    raise ValueError("Unexpected month or city: inspect the input.")
+```
+
+**To:**
+
+```python
+EXPECTED_MONTH_START = "2025-10"
+EXPECTED_MONTH_END = "2026-06"
+EXPECTED_CITY = "Christchurch City"
+DEFAULT_INPUT_FILENAME = "christchurch_listings_2025-10_to_2026-06.csv"
+DEFAULT_OUTPUT_DIRNAME = "cleaned"
+OUTPUT_CSV_NAME = "christchurch_listings_cleaned.csv"
+OUTPUT_REPORT_NAME = "deliverable_4_cleaning_notes.md"
+...
+expected = pd.period_range(EXPECTED_MONTH_START, EXPECTED_MONTH_END, freq="M").astype(str)
+if not df.month_year.isin(expected).all() or not df.neighbourhood_group.eq(EXPECTED_CITY).all():
+    raise ValueError("Unexpected month or city: inspect the input.")
+```
+
+**Why:** It's easier to see all the settings in one spot at the top, instead of searching through the code to find them.
+
 ---
 
 # Deliverable 5 Changes
