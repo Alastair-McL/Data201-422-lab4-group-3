@@ -243,7 +243,13 @@ The saved dataset therefore includes the later processing performed by the pipel
 
 # Deliverable 4 Changes
 
+Both airbnb_deliverable_4.py and rental_bond.py were checked against the Week 9 lecture on good coding habits. Below are the changes made:
+
+---
+
 # Part 1: Changes to airbnb_deliverable_4.py
+
+---
 
 ## Change 1: Gave a variable a proper name
 
@@ -268,6 +274,8 @@ for column in numeric_columns:
 ```
 
 **Why:** A good variable name tells what it is without needing a comment.
+
+---
 
 ## Change 2: Put the key settings in one place
 
@@ -298,6 +306,8 @@ if not df.month_year.isin(expected).all() or not df.neighbourhood_group.eq(EXPEC
 ```
 
 **Why:** It's easier to see all the settings in one spot at the top, instead of searching through the code to find them.
+
+---
 
 ---
 
