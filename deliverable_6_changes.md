@@ -305,6 +305,223 @@ if not df.month_year.isin(expected).all() or not df.neighbourhood_group.eq(EXPEC
 
 **Why:** It's easier to see all the settings in one spot at the top, instead of searching through the code to find them.
 
+---
+
+# Part 2: Changes to rental_bond.py
+
+## Change 1: Added a description at the top
+
+**From:**
+
+```python
+import pandas as pd
+
+
+# ==================================================
+# 1. Load the rental bond dataset
+# ==================================================
+```
+
+**To:**
+
+```python
+"""
+Deliverable 4: clean the rental bond dataset and filter it to the
+October 2025 - June 2026 period used for the Airbnb comparison.
+
+Reads the quarterly tenancy bond CSV, keeps the columns needed for
+rental-price, property-count, dwelling-type and bedroom-category
+analysis, validates identifiers and numeric ranges, and writes the
+cleaned, filtered dataset to a new CSV.
+"""
+import argparse
+from pathlib import Path
+import pandas as pd
+```
+
+**Why:** So someone opening the file for the first time knows what it's for straight away.
+
+---
+
+## Change 2: Removed comments that just repeated the code
+
+Some comments said the exact same thing as the line right after them, so these were taken out.
+
+**From:**
+
+```python
+# Store Location Id as a nullable integer identifier.
+filtered_bond_data["Location Id"] = (
+    filtered_bond_data["Location Id"].astype("Int64")
+)
+...
+# Display the data type of Number Of Beds.
+
+print(
+    filtered_bond_data["Number Of Beds"].dtype
+)
+```
+
+**To:**
+
+```python
+filtered_bond_data["Location Id"] = filtered_bond_data["Location Id"].astype("Int64")
+...
+print(filtered_bond_data["Number Of Beds"].dtype)
+```
+
+Comments that explain a reason for a decision were kept, like why the value -99 is preserved, or why missing bed counts become "Unknown".
+**Why:** A comment that just repeats the code isn't helping - it's extra words to read.
+
+---
+
+## Change 3: Put the key settings in one place
+
+Settings like the filenames, the date range, and the column lists used to be scattered through the file, and some were even written twice. These were all moved to the top, in one spot, and the repeated copies were removed.
+
+**From:**
+
+```python
+bond_file = "Detailed-Quarterly-Tenancy-Q1-2020-Q3-2026.csv"
+bond_data = pd.read_csv(bond_file)
+...
+start_date = pd.Timestamp("2025-10-01")
+end_date = pd.Timestamp("2026-06-30")
+...
+columns_to_keep = [
+    "TimeFrame", "Location Id", "Dwelling Type", ...
+]
+...
+output_file = "rental_bond_cleaned_filtered.csv"
+```
+
+**To:**
+
+```python
+DEFAULT_INPUT_FILENAME = "Detailed-Quarterly-Tenancy-Q1-2020-Q3-2026.csv"
+DEFAULT_OUTPUT_FILENAME = "rental_bond_cleaned_filtered.csv"
+
+START_DATE = pd.Timestamp("2025-10-01")
+END_DATE = pd.Timestamp("2026-06-30")
+
+COLUMNS_TO_KEEP = [
+    "TimeFrame", "Location Id", "Dwelling Type", ...
+]
+```
+
+**Why:** Now it's easy to see all the settings just by looking at the top of the file. It also used to be written in two places — that's risky, because if one copy gets changed and the other doesn't, they stop matching.
+
+---
+
+## Change 4: Made the code check its own assumptions
+
+Two assumptions were only written down as comments. These were changed so the code checks them itself, and stops with an error if something looks wrong.
+
+### Checking for negative Location Id values
+
+**From:**
+
+```python
+# Location Id is an identifier and is retained.
+# The value -99 is preserved because it may represent
+# an unknown or special location category.
+```
+
+(the code didn't actually check this, it was just a comment)
+
+**To:**
+
+```python
+KNOWN_SPECIAL_LOCATION_ID = -99
+...
+other_negative_location_ids = filtered_bond_data.loc[
+    (filtered_bond_data["Location Id"] < 0)
+    & (filtered_bond_data["Location Id"] != KNOWN_SPECIAL_LOCATION_ID),
+    "Location Id",
+].unique()
+if len(other_negative_location_ids) > 0:
+    raise ValueError(
+        "Unexpected negative Location Id values found (not the known "
+        f"special code {KNOWN_SPECIAL_LOCATION_ID}): {sorted(other_negative_location_ids)}"
+    )
+```
+
+### Checking the data has the right time periods
+
+**From:**
+
+```python
+# ==================================================
+# 6. Filter the quarters from October 2025 to June 2026.
+# This includes October 2025, January 2026, and April 2026.
+# ==================================================
+```
+
+(again, just a comment - nothing in the code checked this)
+
+**To:**
+
+```python
+EXPECTED_QUARTERS = [
+    pd.Timestamp("2025-10-01"),
+    pd.Timestamp("2026-01-01"),
+    pd.Timestamp("2026-04-01"),
+]
+...
+observed_quarters = sorted(filtered_bond_data["TimeFrame"].dropna().unique())
+if list(observed_quarters) != EXPECTED_QUARTERS:
+    raise ValueError(
+        "Filtered data does not contain exactly the expected quarters "
+        f"{[d.date() for d in EXPECTED_QUARTERS]}; found "
+        f"{[pd.Timestamp(d).date() for d in observed_quarters]}. Inspect the source file."
+    )
+```
+
+**Why:** A comment can be wrong and nobody would know. A check in the code shows an error right away if something isn't what was expected.
+
+---
+
+## Change 5: Gave the script a clear starting point
+
+The script used to just run from top to bottom in one fixed way. It was rebuilt around one clear function
+
+**From:**
+
+```python
+bond_file = "Detailed-Quarterly-Tenancy-Q1-2020-Q3-2026.csv"
+bond_data = pd.read_csv(bond_file)
+...
+# (everything just runs top to bottom, step by step)
+...
+output_file = "rental_bond_cleaned_filtered.csv"
+filtered_bond_data.to_csv(output_file, index=False)
+```
+
+**To:**
+
+```python
+def clean(source, output_file):
+    source, output_file = Path(source), Path(output_file)
+    bond_data = pd.read_csv(source)
+    ...
+    filtered_bond_data.to_csv(output_file, index=False)
+    return filtered_bond_data
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("input", nargs="?", default=None)
+    parser.add_argument("--output-file", default=None)
+    args = parser.parse_args()
+
+    script_folder = Path(__file__).parent
+    input_file = Path(args.input) if args.input else script_folder / DEFAULT_INPUT_FILENAME
+    output_path = Path(args.output_file) if args.output_file else script_folder / DEFAULT_OUTPUT_FILENAME
+
+    clean(input_file, output_path)
+```
+
+**Why:** The script can now be reused on a different file, or tested, without opening it up and changing the code each time.
 
 ---
 
