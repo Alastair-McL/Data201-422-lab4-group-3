@@ -249,8 +249,6 @@ Both airbnb_deliverable_4.py and rental_bond.py were checked against the Week 9 
 
 # Part 1: Changes to airbnb_deliverable_4.py
 
----
-
 ## Change 1: Gave a variable a proper name
 
 A column was just called c. Now it's called column.
