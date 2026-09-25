@@ -243,8 +243,30 @@ The saved dataset therefore includes the later processing performed by the pipel
 
 # Deliverable 4 Changes
 
+## Change 1: Gave a variable a proper name
+
+A column was just called c. Now it's called column.
+
+**From:**
+
+```python
+for c in numeric_columns:
+    original = df[c]
+    ...
+    log(f"Validate {c}", ...)
+```
+
+**To:**
+
+```python
+for column in numeric_columns:
+    original = df[column]
+    ...
+    log(f"Validate {column}", ...)
+```
+
+**Why:** A good variable name tells what it is without needing a comment.
 
 ---
-
 
 # Deliverable 5 Changes
