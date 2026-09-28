@@ -1,157 +1,145 @@
-'''
-replace "insert_your_api_key_here" with your actual Koordinates API key
-save this file in the same directory as your input CSV file not github
-replace input_file_path with the path to your input CSV file
-replace output_file_path with the path where you want to save the output CSV file
-uses 5 multiprocessing to speed up the queries
-_______________________________________________
-single test query to Koordinates API for one coordinate pair
-import requests
+"""Add Stats NZ area codes to Christchurch Airbnb listings.
 
-api_key = "insert_your_api_key_here"
-layer_id = 123515
+The script uses the Koordinates API to find the Stats NZ area code for each
+unique Airbnb coordinate pair. Set KOORDINATES_API_KEY in the environment
+before running the script.
+"""
 
-latitude = -43.49815
-longitude = 172.65054
-
-url = "https://koordinates.com/services/query/v1/vector.json"
-
-params = {
-    "key": api_key,
-    "layer": layer_id,
-    "x": longitude,
-    "y": latitude,
-    "max_results": 1
-}
-
-response = requests.get(url, params=params)
-
-print(response.status_code)
-print(response.json())
-'''
-import requests
-import pandas as pd
-from pathlib import Path
-from multiprocessing import Pool
+import os
 import time
+from multiprocessing import Pool
+from pathlib import Path
 
-# Your existing Koordinates API key
-API_KEY = "insert_your_api_key_here"
+import pandas as pd
+import requests
 
-# Koordinates layer ID
+
+API_URL = "https://koordinates.com/services/query/v1/vector.json"
 LAYER_ID = 123515
+AREA_CODE_FIELD = "SA22026_V1_00"
+API_KEY_ENV_VAR = "KOORDINATES_API_KEY"
 
-# Input Airbnb CSV
-INPUT_CSV = "/Users/alastairmclauchlan/HD documents/Uni/DATA201/airbnb/cleaned/christchurch_listings_cleaned.csv" #change this to your input file path
+INPUT_CSV = Path("deliverable_5/christchurch_listings_cleaned.csv")
+OUTPUT_CSV = Path("deliverable_5/christchurch_listings_cleaned_area_codes.csv")
 
-# Hard-coded output path
-OUTPUT_CSV = "/Users/alastairmclauchlan/HD documents/Uni/DATA201/airbnb/cleaned/christchurch_listings_cleaned_area_codes.csv" #change this to your output file path
-
-URL = "https://koordinates.com/services/query/v1/vector.json"
+REQUEST_TIMEOUT = 30
+MAX_RETRIES = 3
+RETRY_DELAY_SECONDS = 2
+PROCESS_COUNT = 5
+MAX_RESULTS = 1
 
 
 def get_area_code(coordinate):
-    """Query Koordinates for one coordinate, retrying up to 3 times."""
+    """Return the Stats NZ area code for one latitude/longitude pair."""
 
     latitude, longitude = coordinate
+    api_key = os.environ[API_KEY_ENV_VAR]
 
     params = {
-        "key": API_KEY,
+        "key": api_key,
         "layer": LAYER_ID,
         "x": longitude,
         "y": latitude,
-        "max_results": 1
+        "max_results": MAX_RESULTS,
     }
 
-    for attempt in range(1, 4):
+    for attempt in range(1, MAX_RETRIES + 1):
         try:
-            response = requests.get(URL, params=params, timeout=30)
+            response = requests.get(
+                API_URL,
+                params=params,
+                timeout=REQUEST_TIMEOUT,
+            )
 
             if response.status_code == 200:
                 data = response.json()
-
                 layer = data["vectorQuery"]["layers"][str(LAYER_ID)]
                 features = layer["features"]
 
                 if not features:
                     return coordinate, None
 
-                area_code = features[0]["properties"]["SA22026_V1_00"]
-
-                return coordinate, area_code
+                return coordinate, features[0]["properties"][AREA_CODE_FIELD]
 
             print(
                 f"API error for {latitude}, {longitude}: "
                 f"status {response.status_code} "
-                f"(attempt {attempt}/3)"
+                f"(attempt {attempt}/{MAX_RETRIES})"
             )
 
-        except requests.RequestException as error:
+        except (requests.RequestException, KeyError, ValueError) as error:
             print(
                 f"Request failed for {latitude}, {longitude}: "
-                f"{error} (attempt {attempt}/3)"
+                f"{error} (attempt {attempt}/{MAX_RETRIES})"
             )
 
-        # Wait before retrying
-        if attempt < 3:
-            time.sleep(2)
+        if attempt < MAX_RETRIES:
+            time.sleep(RETRY_DELAY_SECONDS)
 
-    print(f"Giving up after 3 attempts: {latitude}, {longitude}")
+    print(f"Giving up after {MAX_RETRIES} attempts: {latitude}, {longitude}")
     return coordinate, None
 
 
-def main():
-    # Read the full Airbnb dataset
-    df = pd.read_csv(INPUT_CSV)
+def load_coordinates(input_path):
+    """Load the Airbnb data and return the dataframe and unique coordinates."""
 
-    print(f"Loaded {len(df)} Airbnb listings.")
+    df = pd.read_csv(input_path)
 
-    # Get unique latitude/longitude pairs
-    coordinates = (
+    required_columns = {"latitude", "longitude"}
+    missing_columns = required_columns.difference(df.columns)
+    if missing_columns:
+        raise ValueError(
+            f"Input file is missing required columns: {sorted(missing_columns)}"
+        )
+
+    coordinates = list(
         df[["latitude", "longitude"]]
         .drop_duplicates()
         .itertuples(index=False, name=None)
     )
 
-    coordinates = list(coordinates)
+    return df, coordinates
 
+
+def main():
+    """Query Koordinates and save the Airbnb data with area codes."""
+
+    if not os.environ.get(API_KEY_ENV_VAR):
+        raise RuntimeError(
+            f"Set {API_KEY_ENV_VAR} in your environment before running this script."
+        )
+
+    df, coordinates = load_coordinates(INPUT_CSV)
+
+    print(f"Loaded {len(df)} Airbnb listings.")
     print(f"Unique coordinate pairs: {len(coordinates)}")
+    print(f"Duplicate coordinate rows avoided: {len(df) - len(coordinates)}")
+    print(f"Using {PROCESS_COUNT} processes.")
     print(
-        f"Duplicate coordinate rows avoided: "
-        f"{len(df) - len(coordinates)}"
+        f"Starting Koordinates queries with up to {MAX_RETRIES} "
+        f"attempts per request..."
     )
 
-    # Use exactly 5 processes
-    processes = 5
-
-    print(f"Using {processes} processes.")
-    print("Starting Koordinates queries...")
-    print("Failed requests will be retried up to 3 times.")
-
-    with Pool(processes=processes) as pool:
+    with Pool(processes=PROCESS_COUNT) as pool:
         results = pool.map(get_area_code, coordinates)
 
-    # Convert results into a dictionary
     area_codes = dict(results)
-
-    # Add area codes to the full dataset
     df["area_code"] = [
         area_codes.get((latitude, longitude))
         for latitude, longitude in zip(df["latitude"], df["longitude"])
     ]
 
-    # Save a copy of the full dataset
+    OUTPUT_CSV.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(OUTPUT_CSV, index=False)
 
-    print()
-    print("Finished.")
+    missing_area_codes = df["area_code"].isna().sum()
+
+    print("\nFinished.")
     print(f"Total listings: {len(df)}")
     print(f"Unique coordinates queried: {len(coordinates)}")
-    print(f"Listings with area codes: {df['area_code'].notna().sum()}")
-    print(f"Listings without area codes: {df['area_code'].isna().sum()}")
-    print()
-    print("Saved to:")
-    print(OUTPUT_CSV)
+    print(f"Listings with area codes: {len(df) - missing_area_codes}")
+    print(f"Listings without area codes: {missing_area_codes}")
+    print(f"Saved to: {OUTPUT_CSV}")
 
 
 if __name__ == "__main__":
