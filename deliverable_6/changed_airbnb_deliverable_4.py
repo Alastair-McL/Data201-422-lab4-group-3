@@ -9,11 +9,22 @@ import argparse
 from pathlib import Path
 import pandas as pd
 
+# ---------------------------------------------------------------------------
+# Parameters (kept together and named, rather than as literals inline below)
+# ---------------------------------------------------------------------------
+EXPECTED_MONTH_START = "2025-10"
+EXPECTED_MONTH_END = "2026-06"
+EXPECTED_CITY = "Christchurch City"
+DEFAULT_INPUT_FILENAME = "christchurch_listings_2025-10_to_2026-06.csv"
+DEFAULT_OUTPUT_DIRNAME = "cleaned"
+OUTPUT_CSV_NAME = "christchurch_listings_cleaned.csv"
+OUTPUT_REPORT_NAME = "deliverable_4_cleaning_notes.md"
+
 
 def clean(source, output_dir):
     source, output_dir = Path(source), Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
-    target = output_dir / "christchurch_listings_cleaned.csv"
+    target = output_dir / OUTPUT_CSV_NAME
     if source.resolve() == target.resolve():
         raise ValueError("Choose an output directory that does not overwrite the input.")
     raw = pd.read_csv(source, dtype="string")
@@ -24,9 +35,9 @@ def clean(source, output_dir):
         decisions.append((decision, reason, consequence))
 
     # Standardise surrounding whitespace and empty strings only.
-    whitespace = sum(int((df[c].notna() & df[c].ne(df[c].str.strip())).sum()) for c in df)
-    for c in df:
-        df[c] = df[c].str.strip().replace("", pd.NA)
+    whitespace = sum(int((df[column].notna() & df[column].ne(df[column].str.strip())).sum()) for column in df)
+    for column in df:
+        df[column] = df[column].str.strip().replace("", pd.NA)
     log("Trim text and standardise blanks", "Whitespace can create inconsistent categories.",
         f"{whitespace:,} cells had surrounding whitespace; no rows removed.")
 
@@ -42,36 +53,36 @@ def clean(source, output_dir):
     log("Check duplicates using listing ID and month", "Repeated IDs in different months describe different observations.",
         f"{duplicates:,} exact duplicate rows removed; no conflicting listing-month pairs.")
 
-    expected = pd.period_range("2025-10", "2026-06", freq="M").astype(str)
-    if not df.month_year.isin(expected).all() or not df.neighbourhood_group.eq("Christchurch City").all():
+    expected = pd.period_range(EXPECTED_MONTH_START, EXPECTED_MONTH_END, freq="M").astype(str)
+    if not df.month_year.isin(expected).all() or not df.neighbourhood_group.eq(EXPECTED_CITY).all():
         raise ValueError("Unexpected month or city: inspect the input.")
 
     # Validate numbers. Preserve missing values instead of guessing replacements.
     integer_columns = ["minimum_nights", "number_of_reviews", "calculated_host_listings_count",
                        "availability_365", "number_of_reviews_ltm"]
     numeric_columns = ["latitude", "longitude", "price", "reviews_per_month"] + integer_columns
-    for c in numeric_columns:
-        original = df[c]
-        cleaned = original.str.replace("$", "", regex=False).str.replace(",", "", regex=False) if c == "price" else original
+    for column in numeric_columns:
+        original = df[column]
+        cleaned = original.str.replace("$", "", regex=False).str.replace(",", "", regex=False) if column == "price" else original
         values = pd.to_numeric(cleaned, errors="coerce").astype("Float64")
         bad = values.isin([float("inf"), -float("inf")])
-        if c in integer_columns:
+        if column in integer_columns:
             bad |= values.mod(1).ne(0)
-        if c in ["price", "minimum_nights", "calculated_host_listings_count"]:
+        if column in ["price", "minimum_nights", "calculated_host_listings_count"]:
             bad |= values.le(0)
-        elif c not in ["latitude", "longitude"]:
+        elif column not in ["latitude", "longitude"]:
             bad |= values.lt(0)
-        if c == "availability_365":
+        if column == "availability_365":
             bad |= values.gt(365)
-        if c == "latitude":
+        if column == "latitude":
             bad |= ~values.between(-90, 90)
-        if c == "longitude":
+        if column == "longitude":
             bad |= ~values.between(-180, 180)
         values = values.mask(bad.fillna(False))
         invalid = int((original.notna() & values.isna()).sum())
-        df[c] = values.astype("Int64") if c in integer_columns else values
-        log(f"Validate {c}", "Use numeric values and reject impossible ranges; retain unknown values as missing.",
-            f"{invalid:,} invalid values set to missing; {int(df[c].isna().sum()):,} missing after numeric validation, before later filling; no rows removed.")
+        df[column] = values.astype("Int64") if column in integer_columns else values
+        log(f"Validate {column}", "Use numeric values and reject impossible ranges; retain unknown values as missing.",
+            f"{invalid:,} invalid values set to missing; {int(df[column].isna().sum()):,} missing after numeric validation, before later filling; no rows removed.")
 
     dates = pd.to_datetime(df.last_review, format="%Y-%m-%d", errors="coerce")
     invalid_dates = int((df.last_review.notna() & dates.isna()).sum())
@@ -107,7 +118,7 @@ def clean(source, output_dir):
     monthly["missing_prices"] = monthly.records - monthly.usable_prices
     monthly["price_coverage_percent"] = (100 * monthly.usable_prices / monthly.records).round(2)
     missing = pd.DataFrame({"missing_before": raw.isna().sum(), "missing_after": df.isna().sum()})
-    missing["status"] = ["dropped" if c not in df else "added" if c not in raw else "retained" for c in missing.index]
+    missing["status"] = ["dropped" if column not in df else "added" if column not in raw else "retained" for column in missing.index]
 
     def table(frame):
         return frame.fillna("—").to_string(index=False)
@@ -167,7 +178,7 @@ python airbnb_deliverable_4.py path/to/input.csv --output-dir cleaned
 
 When reloading the output in pandas, use `dtype={{"id": "string", "host_id": "string"}}` to preserve identifiers. `month_year` is YYYY-MM text; `last_review` is YYYY-MM-DD text with blank values for missing dates. Numeric missing values are exported as blank cells.
 """
-    (output_dir / "deliverable_4_cleaning_notes.md").write_text(report, encoding="utf-8")
+    (output_dir / OUTPUT_REPORT_NAME).write_text(report, encoding="utf-8")
     print(f"Cleaned {len(raw):,} -> {len(df):,} rows; {len(raw.columns)} -> {len(df.columns)} columns.")
     print(monthly.to_string())
     return df
@@ -184,13 +195,13 @@ if __name__ == "__main__":
     input_file = (
         Path(args.input)
         if args.input
-        else script_folder / "christchurch_listings_2025-10_to_2026-06.csv"
+        else script_folder / DEFAULT_INPUT_FILENAME
     )
 
     output_folder = (
         Path(args.output_dir)
         if args.output_dir
-        else script_folder / "cleaned"
+        else script_folder / DEFAULT_OUTPUT_DIRNAME
     )
 
     clean(input_file, output_folder)

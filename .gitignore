@@ -4,11 +4,14 @@ __pycache__/
 .ipynb_checkpoints/
 .DS_Store
 
-# Large Airbnb dataset stored locally
+# Large Airbnb datasets stored locally
 listings.csv
-
+christchurch_listings_2025-10_to_2026-06.csv
+christchurch_listings_cleaned.csv
+christchurch_listings_cleaned_area_codes.csv
 # Python virtual environments
 venv/
 venv_broken/
 .venv/
 
+listings_*.csv

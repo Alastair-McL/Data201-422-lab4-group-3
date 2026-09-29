@@ -26,7 +26,7 @@ The script `airbnb_deliverable_4.py` cleans the combined Christchurch listings d
 
 See [cleaning decisions and results](cleaned/deliverable_4_cleaning_notes.md) for the reasons behind each change, its consequences and instructions for running the code.
 
-# Detailed Quarterly Tenancy Data — Q1 2020 to Q3 2026
+# Detailed Quarterly Tenancy Data — February 2020 to July 2026
 
 ## Overview
 
@@ -54,8 +54,8 @@ The data is sourced from **rental bond lodgements**, which landlords/agents are 
 | `Total Bonds` | integer | Number of *new* bond lodgements recorded for this location/dwelling type/bed count combination during the quarter (i.e. new tenancies started). |
 | `Active Bonds` | integer | Number of bonds that were held/active (in force) at any point during the quarter, for this combination — a broader, stock-style measure of tenancies rather than new lodgements. |
 | `Closed Bonds` | integer | Number of bonds finalised/refunded (tenancies that ended) during the quarter, for this combination. |
-| `Median Rent` | numeric (AUD/week) | Median weekly rent across the bonds/tenancies in this combination for the quarter. |
-| `Geometric Mean Rent` | numeric (NZD/week) | Geometric mean of weekly rent — used because rent distributions are right-skewed; the geometric mean is less distorted by high-end outliers than the arithmetic mean. |
+| `Median Rent` | numeric (NZD/week) | Median weekly rent across the bonds/tenancies in this combination for the quarter. |
+| `Geometric Mean Rent` | numeric (NZD/week) | represents the typical weekly rent for each quarter, calculated using the geometric mean of the reported rental values. It provides a measure of central tendency that is less influenced by extremely high or low rents than the arithmetic mean, making it useful for summarising rental distributions. |
 | `Upper Quartile Rent` | numeric (NZD/week) | The 75th percentile weekly rent for this combination. |
 | `Lower Quartile Rent` | numeric (NZD/week) | The 25th percentile weekly rent for this combination. |
 | `Log Std Dev Weekly Rent` | numeric | Standard deviation of the natural log of weekly rent — a measure of rent dispersion/inequality within the combination, consistent with reporting a geometric-mean-based rent series. |
@@ -93,3 +93,12 @@ For a given location and quarter, rows with `Dwelling Type = ALL` and/or `Number
 - Small-sample suppression means many suburb-level rows, especially for less common dwelling types or bedroom counts, will have `NULL` rent statistics even though bond counts are present.
 - `Number Of Beds` coding is inconsistent across time (`5+` appears alongside exact values `5`–`15` in different periods), so treat it as an approximate/banded field for higher bedroom counts rather than a strictly continuous one.
 
+
+
+# Deliverable 5
+
+## Median Airbnb Price in Christchurch Central
+
+Using the joined Airbnb and rental bond dataset, Airbnb listings were filtered to Christchurch Central (Location ID 326600). Duplicate observations created by the join were removed using the Airbnb listing ID and month before calculating the median nightly price.
+
+The median Airbnb price in Christchurch Central is **$239.00 per night**.
