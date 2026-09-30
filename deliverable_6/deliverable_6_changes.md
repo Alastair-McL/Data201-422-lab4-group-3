@@ -526,3 +526,19 @@ if __name__ == "__main__":
 ---
 
 # Deliverable 5 Changes
+| Change | Why |
+|---|---|
+| Replaced absolute file paths with relative paths | Makes the code portable between different computers and follows the Week 9 recommendation to use the project root and relative paths. |
+| Added named GLOBAL constants for important values | Removes "magic numbers" and makes important analytical choices visible and easier to change. |
+| Refactored the large analysis script into functions | Gives each part of the analysis a clear purpose and makes the code easier to understand, test, and reuse. |
+| Added a `main()` function | Provides a clear entry point for each script and separates the program structure from individual functions. |
+| Added input column validation | Prevents the scripts from continuing when required columns are missing and gives a clear error message. |
+| Added join validation | Checks that the rental-bond join key is unique and that the left join does not unexpectedly increase the number of Airbnb rows. |
+| Added checks for empty or invalid results | Makes assumptions in the analysis explicit and helps identify problems before producing results. |
+| Made the Koordinates API key an environment variable | Avoids putting an API key directly in the script and makes the API configuration easier to manage. |
+| Removed old commented-out API test code | Removes duplicated/stale code so the script contains only the code needed for the actual workflow. |
+| Improved variable and function names | Makes the code more self-documenting, reducing the need for long explanatory comments. |
+| Reduced unnecessary comments and large section headers | Follows the Week 9 principle of putting information into the code itself while retaining comments where they explain the overall purpose or important choices. |
+| Fixed the minimum-observation selection | The reported largest median price gap now comes from locations with at least 20 observations, matching the reliability rule already defined in the analysis. |
+| Added clearer output messages | Makes it easier to understand what the scripts have done and identify potential problems when running them. |
+
