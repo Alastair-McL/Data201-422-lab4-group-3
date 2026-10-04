@@ -7,6 +7,7 @@ MONTHLY_DATA := listings_2025_10.csv listings_2025_11.csv listings_2025_12.csv \
 	listings_2026_01.csv listings_2026_02.csv listings_2026_03.csv \
 	listings_2026_04.csv listings_2026_05.csv listings_2026_06.csv
 
+# The Deliverable 3 directory has a trailing space in its actual name.
 DELIVERABLE_3_SCRIPT := deliverable_3 /airbnb_deliverable_3.py
 DELIVERABLE_4_SCRIPT := deliverable_4/airbnb_deliverable_4.py
 COMBINED_DATA := christchurch_listings_2025-10_to_2026-06.csv
@@ -18,17 +19,18 @@ CLEANING_NOTES := deliverable_5/deliverable_4_cleaning_notes.md
 
 all: deliverable_4
 
-# Deliverable 3 writes several outputs in one run, so use a stamp to record
-# successful completion and avoid rerunning it when its inputs are unchanged.
-$(D3_STAMP): $(MONTHLY_DATA) "$(DELIVERABLE_3_SCRIPT)"
+# Do not list the Deliverable 3 script as a prerequisite: GNU Make treats
+# quotes as literal characters in prerequisite names, and this directory
+# name contains a space. Monthly files and this Makefile trigger regeneration.
+$(D3_STAMP): $(MONTHLY_DATA) Makefile
 	$(PYTHON) "$(DELIVERABLE_3_SCRIPT)"
 	test -f "$(COMBINED_DATA)"
 	touch "$@"
 
 deliverable_3: $(D3_STAMP)
 
-# Deliverable 4 uses the combined dataset and writes the cleaned data and notes.
-$(CLEANED_DATA): $(D3_STAMP) "$(DELIVERABLE_4_SCRIPT)" | deliverable_5
+# Deliverable 4 runs after Deliverable 3 and writes the cleaned data and notes.
+$(CLEANED_DATA): $(D3_STAMP) Makefile | deliverable_5
 	$(PYTHON) "$(DELIVERABLE_4_SCRIPT)" "$(COMBINED_DATA)" --output-dir deliverable_5
 	test -f "$(CLEANING_NOTES)"
 
