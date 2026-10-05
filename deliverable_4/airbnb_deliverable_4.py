@@ -42,7 +42,7 @@ def clean(source, output_dir):
     log("Check duplicates using listing ID and month", "Repeated IDs in different months describe different observations.",
         f"{duplicates:,} exact duplicate rows removed; no conflicting listing-month pairs.")
 
-    expected = pd.period_range("2025-10", "2026-06", freq="M").astype(str)
+    expected = pd.period_range("2025-10", "2026-08", freq="M").astype(str)
     if not df.month_year.isin(expected).all() or not df.neighbourhood_group.eq("Christchurch City").all():
         raise ValueError("Unexpected month or city: inspect the input.")
 

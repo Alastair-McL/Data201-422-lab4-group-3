@@ -23,8 +23,8 @@ INPUT_CSV = Path("deliverable_5/christchurch_listings_cleaned.csv")
 OUTPUT_CSV = Path("deliverable_5/christchurch_listings_cleaned_area_codes.csv")
 
 REQUEST_TIMEOUT = 30
-MAX_RETRIES = 3
-RETRY_DELAY_SECONDS = 2
+MAX_RETRIES = 5
+RETRY_DELAY_SECONDS = 5
 PROCESS_COUNT = 5
 MAX_RESULTS = 1
 

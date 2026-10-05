@@ -147,7 +147,7 @@ def plot_location_price_gaps(df, reliable_locations):
     plt.figure(figsize=(14, 8))
     plt.boxplot(
         plot_values,
-        labels=[str(int(location_id)) for location_id in location_order],
+        tick_labels=[str(int(location_id)) for location_id in location_order],
         showfliers=False,
     )
     plt.axhline(0, linestyle="--", linewidth=1)
