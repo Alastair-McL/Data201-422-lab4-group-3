@@ -120,4 +120,3 @@ This combines and cleans the monthly listings, retrieves area codes, and joins t
 
 Test result: 35,796 rows processed, including 3,488 July rows and 3,513 August rows. All rows received area codes, and the join retained all rows.
 
-Analysis handover: 13,850 rows have no matching rental-bond data; matching for July and August needs checking. The Deliverable 3 review-age calculation still uses a fixed June scrape date, and its chart titles need updating before using those plots. Updated analyses and plots are Chinnu’s task.
