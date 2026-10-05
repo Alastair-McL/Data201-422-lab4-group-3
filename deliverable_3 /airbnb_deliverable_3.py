@@ -31,9 +31,12 @@ input_files = {
     "listings_2026_03.csv": "2026-03",
     "listings_2026_04.csv": "2026-04",
     "listings_2026_05.csv": "2026-05",
-    "listings_2026_06.csv": "2026-06"
+    "listings_2026_06.csv": "2026-06",
+    "listings_2026_07.csv": "2026-07",
+    "listings_2026_08.csv": "2026-08"
 }
-output_file = "christchurch_listings_2025-10_to_2026-06.csv"
+
+output_file = "christchurch_listings_2025-10_to_2026-08.csv"
 price_plot_quantile = 0.99
 identifier_columns = ["id", "host_id"]
 category_columns = ["neighbourhood", "room_type", "month_year"]
@@ -199,7 +202,7 @@ plt.savefig(
     bbox_inches="tight"
 )
 
-plt.show()
+plt.close()
 
 # --------------------------------------------------
 # Plot 2 -Days Since Last Review Histogram
@@ -276,7 +279,7 @@ plt.savefig(
     bbox_inches="tight"
 )
 
-plt.show()
+plt.close()
 
 
 # --------------------------------------------------

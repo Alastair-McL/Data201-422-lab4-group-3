@@ -5,7 +5,8 @@ PYTHON ?= python
 # Monthly Inside Airbnb files required by Deliverable 3.
 MONTHLY_DATA := listings_2025_10.csv listings_2025_11.csv listings_2025_12.csv \
 	listings_2026_01.csv listings_2026_02.csv listings_2026_03.csv \
-	listings_2026_04.csv listings_2026_05.csv listings_2026_06.csv
+	listings_2026_04.csv listings_2026_05.csv listings_2026_06.csv \
+	listings_2026_07.csv listings_2026_08.csv
 
 # The Deliverable 3 directory has a trailing space in its actual name.
 DELIVERABLE_3_SCRIPT := deliverable_3 /airbnb_deliverable_3.py
@@ -14,7 +15,7 @@ AREA_CODE_SCRIPT := deliverable_5/Stats_area_api_query.py
 JOIN_SCRIPT := deliverable_5/join_datasets.py
 ANALYSIS_SCRIPT := deliverable_5/christchurch_airbnb_rental_analysis.py
 
-COMBINED_DATA := christchurch_listings_2025-10_to_2026-06.csv
+COMBINED_DATA := christchurch_listings_2025-10_to_2026-08.csv
 D3_STAMP := .deliverable_3_complete
 CLEANED_DATA := deliverable_5/christchurch_listings_cleaned.csv
 CLEANING_NOTES := deliverable_5/deliverable_4_cleaning_notes.md
