@@ -102,3 +102,21 @@ For a given location and quarter, rows with `Dwelling Type = ALL` and/or `Number
 Using the joined Airbnb and rental bond dataset, Airbnb listings were filtered to Christchurch Central (Location ID 326600). Duplicate observations created by the join were removed using the Airbnb listing ID and month before calculating the median nightly price.
 
 The median Airbnb price in Christchurch Central is **$239.00 per night**.
+
+
+### Deliverable 7: processing July and August
+
+After installing dependencies with `python -m pip install -r requirements.txt`, ensure the October 2025–August 2026 monthly CSVs are in the project root, named `listings_YYYY_MM.csv`. The existing cleaned rental-bond dataset is also required.
+
+Set your own `KOORDINATES_API_KEY` in the terminal environment without saving it in the repository.
+
+From the project root, run:
+
+```bash
+make join
+```
+
+This combines and cleans the monthly listings, retrieves area codes, and joins the rental-bond data. The output is `deliverable_5/christchurch_airbnb_rental_joined.csv`.
+
+Test result: 35,796 rows processed, including 3,488 July rows and 3,513 August rows. All rows received area codes, and the join retained all rows.
+

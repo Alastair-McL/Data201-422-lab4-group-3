@@ -1,7 +1,7 @@
 '''
 Data201/422 - Deliverable 3 - AirBnB Christchurch Data Analysis
 
-Processes Airbnb listings from October 2025 to June 2026. 
+Processes Airbnb listings from October 2025 to August 2026. 
 Filters the data to Christchurch City listings only, combines the monthly datasets, 
 and produces summary statistics and visualisations.
 
@@ -31,9 +31,12 @@ input_files = {
     "listings_2026_03.csv": "2026-03",
     "listings_2026_04.csv": "2026-04",
     "listings_2026_05.csv": "2026-05",
-    "listings_2026_06.csv": "2026-06"
+    "listings_2026_06.csv": "2026-06",
+    "listings_2026_07.csv": "2026-07",
+    "listings_2026_08.csv": "2026-08"
 }
-output_file = "christchurch_listings_2025-10_to_2026-06.csv"
+
+output_file = "christchurch_listings_2025-10_to_2026-08.csv"
 price_plot_quantile = 0.99
 identifier_columns = ["id", "host_id"]
 category_columns = ["neighbourhood", "room_type", "month_year"]
@@ -185,7 +188,7 @@ plt.hist(
 
 plt.title(
     "Christchurch Airbnb Price Distribution\n"
-    "October 2025–June 2026"
+    "October 2025–August 2026"
 )
 plt.xlabel("Price per night (NZD)")
 plt.ylabel("Number of listing records")
@@ -199,7 +202,7 @@ plt.savefig(
     bbox_inches="tight"
 )
 
-plt.show()
+plt.close()
 
 # --------------------------------------------------
 # Plot 2 -Days Since Last Review Histogram
@@ -260,7 +263,7 @@ plt.hist(
 
 plt.title(
     "Distribution of Days Since Last Review\n"
-    "Christchurch Airbnb Listings (October 2025–June 2026)"
+    "Christchurch Airbnb Listings (October 2025–August 2026)"
 )
 
 plt.xlabel("Days Since Last Review")
@@ -276,7 +279,7 @@ plt.savefig(
     bbox_inches="tight"
 )
 
-plt.show()
+plt.close()
 
 
 # --------------------------------------------------
