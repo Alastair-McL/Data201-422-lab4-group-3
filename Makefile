@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := all
 
-PYTHON ?= python
+PYTHON ?= python3
 
 # Monthly Inside Airbnb files required by Deliverable 3.
 MONTHLY_DATA := listings_2025_10.csv listings_2025_11.csv listings_2025_12.csv \
