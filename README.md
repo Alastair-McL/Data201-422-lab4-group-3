@@ -1,8 +1,8 @@
-# Data201-422-lab4-group-3
-Alastair McLauchlan
-Sophie McNee
-Darrel Susan Binu
-Chinnu Rappai
+# Data201-422-lab4-group-3 2026
+Alastair McLauchlan. 
+Sophie McNee. 
+Darrel Susan Binu. 
+Chinnu Rappai. 
 ## AirBnB data dictionary
 ### This data is licensed under a Creative Commons Attribution 4.0 International License. CC BY 4.0
 #### AirBnb NZ data sourced on 30th July 2026 from https://insideairbnb.com/get-the-data/
