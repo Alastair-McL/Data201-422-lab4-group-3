@@ -21,6 +21,7 @@ from pathlib import Path
 # This prevents problems caused by running the script from another directory.
 folder = Path(__file__).parent.parent
 output_folder = Path(__file__).parent
+input_folder = folder / "data" / "raw"
 
 input_files = {
     "listings_2025_10.csv": "2025-10",
@@ -47,7 +48,7 @@ scrape_date = "2026-06-19"
 christchurch_datasets = []
 #loading and filtering
 for filename, month_year in input_files.items():
-    monthly_listings = pd.read_csv(folder/filename)
+    monthly_listings = pd.read_csv(input_folder / filename)
 
     christchurch_listings = monthly_listings[
         monthly_listings["neighbourhood_group"] == "Christchurch City"

@@ -1,9 +1,47 @@
-# Data201-422-lab4-group-3 2026
-Alastair McLauchlan. 
-Sophie McNee. 
-Darrel Susan Binu. 
-Chinnu Rappai. 
-## AirBnB data dictionary
+# Christchurch Airbnb and Rental Market Analysis
+## DATA201/422 — Lab 4, Group 3, 2026
+
+### Team members
+
+- Alastair McLauchlan
+- Sophie McNee
+- Darrel Susan Binu
+- Chinnu Rappai
+
+### Project overview
+
+This project combines Christchurch Airbnb listings with rental-bond
+data to investigate short-term accommodation prices and the long-term
+rental market.
+
+The work includes preparing monthly datasets, cleaning data, matching
+geographic areas, joining datasets, and analysing the results.
+
+
+
+## Deliverable 1: GitHub setup and collaboration
+
+### Group repository
+
+Our group project is hosted on GitHub:
+
+[Data201-422-lab4-group-3](https://github.com/Alastair-McL/Data201-422-lab4-group-3)
+
+The repository provides a shared location for our code, data, documentation, and analysis. Git records changes and contributions throughout the project.
+
+
+
+## Deliverable 2: Data exploration using a no-code workflow
+
+### Dataset and source
+
+The dataset for this deliverable is the **June 2026 New Zealand listings.csv** file from
+[Inside Airbnb](https://insideairbnb.com/get-the-data/).
+
+This is the summary listings dataset, not `listings.csv.gz`.
+
+
+## Airbnb data dictionary
 ### This data is licensed under a Creative Commons Attribution 4.0 International License. CC BY 4.0
 #### AirBnb NZ data sourced on 30th July 2026 from https://insideairbnb.com/get-the-data/
 ##### ID: unique identifier for the listing
@@ -24,15 +62,29 @@ Chinnu Rappai.
 ##### availability_365: number of days in the next 365 that the listing is bookable for.
 ##### number_of_reviews_ltm: number of reviews the listing has received in the last 12 months 
 
+
+
+## Deliverable 3: Christchurch data preparation
+
+We filtered the monthly Airbnb datasets to Christchurch City, added
+a month-and-year column, and combined them into one dataset.
+
+The original period was October 2025–June 2026. Deliverable 7 later
+extended it to August 2026.
+
+Download the monthly New Zealand listings files for October 2025 to August 2026 and store them locally in `data/raw/`, named `listings_YYYY_MM.csv`. These raw files are not included in GitHub.
+
+
+
 ## Deliverable 4: Christchurch listings cleaning
 
 The script `airbnb_deliverable_4.py` cleans the combined Christchurch listings dataset, retaining latitude and longitude.
 
 See [cleaning decisions and results](cleaned/deliverable_4_cleaning_notes.md) for the reasons behind each change, its consequences and instructions for running the code.
 
-# Detailed Quarterly Tenancy Data — February 2020 to July 2026
+### Rental-bond data dictionary — February 2020 to July 2026
 
-## Overview
+### Overview
 
 This dataset (`Detailed-Quarterly-Tenancy-Q1-2020-Q3-2026.csv`) contains **quarterly residential tenancy bond and rent statistics for New Zealand**, broken down by location, dwelling type, and number of bedrooms.
 
@@ -98,19 +150,35 @@ For a given location and quarter, rows with `Dwelling Type = ALL` and/or `Number
 - `Number Of Beds` coding is inconsistent across time (`5+` appears alongside exact values `5`–`15` in different periods), so treat it as an approximate/banded field for higher bedroom counts rather than a strictly continuous one.
 
 
+The original cleaned dataset in `cleaned/` covers October 2025–June2026 and contains 28,795 rows.
 
-# Deliverable 5
+The extended cleaned dataset in `deliverable_5/` covers October 2025–August 2026 and contains 35,796 rows. This is the version usedfor the updated pipeline in Deliverable 7.
 
-## Median Airbnb Price in Christchurch Central
+
+
+## Deliverable 5: Joining datasets and analysis
+
+### Median Airbnb Price in Christchurch Central
 
 Using the joined Airbnb and rental bond dataset, Airbnb listings were filtered to Christchurch Central (Location ID 326600). Duplicate observations created by the join were removed using the Airbnb listing ID and month before calculating the median nightly price.
 
 The median Airbnb price in Christchurch Central is **$239.00 per night**.
 
 
-### Deliverable 7: processing July and August
 
-After installing dependencies with `python -m pip install -r requirements.txt`, ensure the October 2025–August 2026 monthly CSVs are in the project root, named `listings_YYYY_MM.csv`. The existing cleaned rental-bond dataset is also required.
+## Deliverable 6: Coding practices and pipeline design
+
+The pipeline improvements are implemented in the [Makefile](Makefile).
+
+Supporting documentation:
+- [Change notes](deliverable_6/deliverable_6_changes.md)
+- [Design principles](deliverable_6/deliverable_6_design_principles.md)
+
+
+
+## Deliverable 7: processing July and August
+
+After installing dependencies with `python -m pip install -r requirements.txt`, ensure the October 2025–August 2026 monthly CSVs are stored locally in `data/raw/`, named `listings_YYYY_MM.csv`. These raw files are not included in GitHub. The existing cleaned rental-bond dataset is also required.
 
 Set your own `KOORDINATES_API_KEY` in the terminal environment without saving it in the repository.
 
@@ -123,4 +191,3 @@ make join
 This combines and cleans the monthly listings, retrieves area codes, and joins the rental-bond data. The output is `deliverable_5/christchurch_airbnb_rental_joined.csv`.
 
 Test result: 35,796 rows processed, including 3,488 July rows and 3,513 August rows. All rows received area codes, and the join retained all rows.
-
