@@ -8,7 +8,7 @@ Input: `christchurch_listings_2025-10_to_2026-08.csv`, created by Deliverable 3.
 - After: 35,796 listing-month records, 19 columns.
 - Rows lost: 0.
 - Distinct listing IDs across all months: 4,264.
-- pandas version used: 2.3.3.
+- pandas version used: 3.0.5.
 
 A row describes one listing in one labelled month. Count unique IDs within each month; summing monthly counts counts repeated observations, not unique properties across the whole period.
 

@@ -13,9 +13,9 @@ import pandas as pd
 # Parameters (kept together and named, rather than as literals inline below)
 # ---------------------------------------------------------------------------
 EXPECTED_MONTH_START = "2025-10"
-EXPECTED_MONTH_END = "2026-06"
+EXPECTED_MONTH_END = "2026-08"
 EXPECTED_CITY = "Christchurch City"
-DEFAULT_INPUT_FILENAME = "christchurch_listings_2025-10_to_2026-06.csv"
+DEFAULT_INPUT_FILENAME = "christchurch_listings_2025-10_to_2026-08.csv"
 DEFAULT_OUTPUT_DIRNAME = "cleaned"
 OUTPUT_CSV_NAME = "christchurch_listings_cleaned.csv"
 OUTPUT_REPORT_NAME = "deliverable_4_cleaning_notes.md"
