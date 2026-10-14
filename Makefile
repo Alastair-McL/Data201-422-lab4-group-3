@@ -7,6 +7,7 @@ MONTHLY_DATA := listings_2025_10.csv listings_2025_11.csv listings_2025_12.csv \
 	listings_2026_01.csv listings_2026_02.csv listings_2026_03.csv \
 	listings_2026_04.csv listings_2026_05.csv listings_2026_06.csv \
 	listings_2026_07.csv listings_2026_08.csv
+MONTHLY_DATA := $(addprefix data/raw/,$(MONTHLY_DATA))
 
 # The Deliverable 3 directory has a trailing space in its actual name.
 DELIVERABLE_3_SCRIPT := deliverable_3 /airbnb_deliverable_3.py
